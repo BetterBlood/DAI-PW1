@@ -8,10 +8,11 @@ public class Main {
     // (empty , same as help)
 
     public static void main(String[] args) {
-        // Singles
-        Converter.convert("image/webp.webp", "image/output.png");
-        Converter.convert("image/png.png", "image/output.webp");
-        // Recursion
+        // Recursive folder creation
+        Converter.convert("./image/webp.webp", "./image/a/b/output.png");
+        // Conversion png->webp
+        Converter.convert("./image/png.png", "./image/output.webp");
+        // Recursive conversion
         Converter.convertRecursively("./image", "png", "webp");
     }
 }

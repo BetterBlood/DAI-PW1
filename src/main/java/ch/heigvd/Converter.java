@@ -33,6 +33,10 @@ public class Converter {
         formatStrings.put(Format.JPG, JPG_FORMAT);
     }
 
+    private static Format stringToFormat(String s) throws IllegalArgumentException {
+        return Format.valueOf(s.toUpperCase());
+    }
+
     private static boolean isWebp(String file) {
         return file.toLowerCase().endsWith(WEBP_FORMAT);
     }
@@ -73,6 +77,13 @@ public class Converter {
         // Write
         File file = new File(output);
         try {
+            createFolderRecursively(file);
+        }
+        catch (RuntimeException e) {
+            System.out.println("Error while creating folder structure : " + e);
+            return;
+        }
+        try {
             if (isWebp(output)) {
                 ImageWriter writer = ImageIO.getImageWritersByMIMEType("image/webp").next();
                 WebPWriteParam writeParam = new WebPWriteParam(writer.getLocale());
@@ -95,10 +106,6 @@ public class Converter {
         System.out.println("Converted : " + input + " to : " + output);
     }
 
-    private static Format stringToFormat(String s) throws IllegalArgumentException {
-        return Format.valueOf(s.toUpperCase());
-    }
-
     public static void convertRecursively(String path, String input, String output) {
         File folder = new File(path);
         if (folder.exists() && folder.isDirectory()) {
@@ -109,6 +116,16 @@ public class Converter {
             }
         } else {
             System.out.println("The specified path is not a valid directory.");
+        }
+    }
+
+    private static void createFolderRecursively(File folder) throws RuntimeException {
+        File parent = folder.getParentFile();
+        if (!parent.exists()) {
+            createFolderRecursively(parent);
+            if (!parent.mkdir()) {
+                throw new RuntimeException("Error while creating a folder");
+            }
         }
     }
 
