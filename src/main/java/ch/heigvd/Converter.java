@@ -13,11 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Converter {
-    static final String WEBP_FORMAT = ".webp";
-    static final String PNG_FORMAT = ".png";
-    static final String JPEG_FORMAT = ".jpeg";
-    static final String JPG_FORMAT = ".jpg";
-
     private enum Format {
         WEBP,
         PNG,
@@ -25,6 +20,10 @@ public class Converter {
         JPG
     }
 
+    static final String WEBP_FORMAT = ".webp";
+    static final String PNG_FORMAT = ".png";
+    static final String JPEG_FORMAT = ".jpeg";
+    static final String JPG_FORMAT = ".jpg";
     private static final Map<Format, String> formatStrings = new HashMap<Format, String>();
 
     static {
@@ -93,7 +92,7 @@ public class Converter {
             System.err.println("Error while writing a file : " + e);
         }
 
-        System.out.printf("Converted : " + input + " to : " + output);
+        System.out.println("Converted : " + input + " to : " + output);
     }
 
     private static Format stringToFormat(String s) throws IllegalArgumentException {
@@ -123,7 +122,7 @@ public class Converter {
             if (file.isDirectory()) {
                 traverseFolder(file, inputFormat, outputFormat);
             } else if (file.getName().endsWith(formatStrings.get(inputFormat))) {
-                convert(file.getName(), file.getName() + formatStrings.get(outputFormat));
+                convert(file.getPath(), file.getPath() + formatStrings.get(outputFormat));
             }
         }
     }

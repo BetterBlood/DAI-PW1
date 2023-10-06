@@ -12,6 +12,6 @@ public class Main {
         Converter.convert("image/webp.webp", "image/output.png");
         Converter.convert("image/png.png", "image/output.webp");
         // Recursion
-        Converter.convertRecursively("/image", "webp", "png");
+        Converter.convertRecursively("./image", "png", "webp");
     }
 }
