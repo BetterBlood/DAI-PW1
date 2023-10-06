@@ -56,12 +56,18 @@ public class Converter {
     public static void convert(String input, String output, boolean lossless) {
         // Read
         BufferedImage image;
+        File inputFile = new File(input);
+        if (!inputFile.exists()) {
+            System.out.println("Error, the input file does not exist");
+            return;
+        }
+
         try {
             if (isWebp(input)) {
                 ImageReader reader = ImageIO.getImageReadersByMIMEType("image/webp").next();
                 WebPReadParam readParam = new WebPReadParam();
                 readParam.setBypassFiltering(true);
-                reader.setInput(new FileImageInputStream(new File(input)));
+                reader.setInput(new FileImageInputStream(inputFile));
                 image = reader.read(0, readParam);
             } else if (isPng(input) || isJpg(input)) {
                 image = ImageIO.read(new File(input));
@@ -75,9 +81,9 @@ public class Converter {
         }
 
         // Write
-        File file = new File(output);
+        File outputFile = new File(output);
         try {
-            createFolderRecursively(file);
+            createFolderRecursively(outputFile);
         }
         catch (RuntimeException e) {
             System.out.println("Error while creating folder structure : " + e);
@@ -89,12 +95,12 @@ public class Converter {
                 WebPWriteParam writeParam = new WebPWriteParam(writer.getLocale());
                 writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
                 writeParam.setCompressionType(writeParam.getCompressionTypes()[lossless ? WebPWriteParam.LOSSLESS_COMPRESSION : WebPWriteParam.LOSSY_COMPRESSION]);
-                writer.setOutput(new FileImageOutputStream(file));
+                writer.setOutput(new FileImageOutputStream(outputFile));
                 writer.write(null, new IIOImage(image, null, null), writeParam);
             } else if (isPng(output)) {
-                ImageIO.write(image, "png", file);
+                ImageIO.write(image, "png", outputFile);
             } else if (isJpg(output)) {
-                ImageIO.write(image, "jpg", file);
+                ImageIO.write(image, "jpg", outputFile);
             } else {
                 System.out.println("Output file type not supported");
                 return;
