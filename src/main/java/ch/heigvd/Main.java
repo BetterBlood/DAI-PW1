@@ -1,19 +1,9 @@
 package ch.heigvd;
 
-import com.luciad.imageio.webp.WebPReadParam;
-import com.luciad.imageio.webp.WebPWriteParam;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-
-import javax.imageio.*;
-import javax.imageio.stream.FileImageInputStream;
-import javax.imageio.stream.FileImageOutputStream;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.Callable;
 
 @Command(
         name = "image file converter",
