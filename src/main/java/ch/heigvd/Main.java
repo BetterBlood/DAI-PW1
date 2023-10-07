@@ -5,7 +5,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-import java.util.concurrent.Collable;
+import java.util.concurrent.Callable;
 
 @Command(
         name = "image file converter",
