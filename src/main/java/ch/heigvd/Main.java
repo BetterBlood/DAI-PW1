@@ -5,6 +5,8 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+import java.util.concurrent.Collable;
+
 @Command(
         name = "image file converter",
         description = "convert jpg-png-webp format, with lossless if needed",
