@@ -111,7 +111,7 @@ public class Converter {
         // Write
         File outputFile = new File(output);
         try {
-            createFolderRecursively(outputFile);
+            createFolder(outputFile);
         }
         catch (RuntimeException e) {
             System.out.println("Error while creating folder structure : " + e);
@@ -175,10 +175,10 @@ public class Converter {
      * @param folder The folder that is desired to be created
      * @throws RuntimeException if creating a folder fails
      */
-    private static void createFolderRecursively(File folder) throws RuntimeException {
+    private static void createFolder(File folder) throws RuntimeException {
         File parent = folder.getParentFile();
         if (!parent.exists()) {
-            createFolderRecursively(parent);
+            createFolder(parent);
             if (!parent.mkdir()) {
                 throw new RuntimeException("Error while creating a folder");
             }
