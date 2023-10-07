@@ -8,6 +8,8 @@ public class Main {
     // (empty , same as help)
 
     public static void main(String[] args) {
+        // Always call changeParameters with matching arguments before doing a conversion else it will keep the prior parameters saved
+        Converter.changeParameters(true, true);
         // Recursive folder creation from output
         // Conversion webp->png
         Converter.convert("./image/webp.webp", "./image/a/b/webp.png");
@@ -20,6 +22,6 @@ public class Main {
         // Folder conversion
         Converter.convert("./image", "png", "webp");
         // Recursive folder conversion
-        Converter.convert("./image", "png", "webp", true);
+        Converter.convert("./image", "png", "webp");
     }
 }
