@@ -112,11 +112,15 @@ public class Converter {
         System.out.println("Converted : " + input + " to : " + output);
     }
 
-    public static void convertRecursively(String path, String input, String output) {
+    public static void convert(String path, String input, String output) {
+        convert(path, input, output, false);
+    }
+
+    public static void convert(String path, String input, String output, boolean isRecursive) {
         File folder = new File(path);
         if (folder.exists() && folder.isDirectory()) {
             try {
-                Converter.traverseFolder(folder, stringToFormat(input), stringToFormat(output));
+                Converter.convertFolder(folder, stringToFormat(input), stringToFormat(output), isRecursive);
             } catch (IllegalArgumentException e) {
                 System.err.println("A specified format is not a valid format : " + e);
             }
@@ -135,15 +139,15 @@ public class Converter {
         }
     }
 
-    private static void traverseFolder(File folder, Format inputFormat, Format outputFormat) {
+    private static void convertFolder(File folder, Format inputFormat, Format outputFormat, boolean isRecursive) {
         File[] files = folder.listFiles();
         if (files == null) {
             return;
         }
 
         for (File file : files) {
-            if (file.isDirectory()) {
-                traverseFolder(file, inputFormat, outputFormat);
+            if (isRecursive && file.isDirectory()) {
+                convertFolder(file, inputFormat, outputFormat, true);
             } else if (file.getName().endsWith(formatStrings.get(inputFormat))) {
                 convert(file.getPath(), file.getPath() + formatStrings.get(outputFormat));
             }
