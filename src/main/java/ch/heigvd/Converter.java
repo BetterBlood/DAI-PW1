@@ -20,11 +20,14 @@ public class Converter {
         JPG
     }
 
-    static final String WEBP_FORMAT = ".webp";
-    static final String PNG_FORMAT = ".png";
-    static final String JPEG_FORMAT = ".jpeg";
-    static final String JPG_FORMAT = ".jpg";
+    private static final String WEBP_FORMAT = ".webp";
+    private static final String PNG_FORMAT = ".png";
+    private static final String JPEG_FORMAT = ".jpeg";
+    private static final String JPG_FORMAT = ".jpg";
     private static final Map<Format, String> formatStrings = new HashMap<Format, String>();
+
+    private static boolean isLossless;
+    private static boolean isRecursive;
 
     static {
         formatStrings.put(Format.WEBP, WEBP_FORMAT);
@@ -50,10 +53,6 @@ public class Converter {
     }
 
     public static void convert(String input, String output) {
-        convert(input, output, true);
-    }
-
-    public static void convert(String input, String output, boolean lossless) {
         // Read
         BufferedImage image;
         File inputFile = new File(input);
@@ -94,7 +93,7 @@ public class Converter {
                 ImageWriter writer = ImageIO.getImageWritersByMIMEType("image/webp").next();
                 WebPWriteParam writeParam = new WebPWriteParam(writer.getLocale());
                 writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                writeParam.setCompressionType(writeParam.getCompressionTypes()[lossless ? WebPWriteParam.LOSSLESS_COMPRESSION : WebPWriteParam.LOSSY_COMPRESSION]);
+                writeParam.setCompressionType(writeParam.getCompressionTypes()[isLossless ? WebPWriteParam.LOSSLESS_COMPRESSION : WebPWriteParam.LOSSY_COMPRESSION]);
                 writer.setOutput(new FileImageOutputStream(outputFile));
                 writer.write(null, new IIOImage(image, null, null), writeParam);
             } else if (isPng(output)) {
@@ -112,17 +111,22 @@ public class Converter {
         System.out.println("Converted : " + input + " to : " + output);
     }
 
-    public static void convertRecursively(String path, String input, String output) {
+    public static void convert(String path, String input, String output) {
         File folder = new File(path);
         if (folder.exists() && folder.isDirectory()) {
             try {
-                Converter.traverseFolder(folder, stringToFormat(input), stringToFormat(output));
+                Converter.convertFolder(folder, stringToFormat(input), stringToFormat(output), isRecursive);
             } catch (IllegalArgumentException e) {
                 System.err.println("A specified format is not a valid format : " + e);
             }
         } else {
             System.out.println("The specified path is not a valid directory.");
         }
+    }
+
+    public static void changeParameters(boolean isLossless, boolean isRecursive) {
+        Converter.isLossless = isLossless;
+        Converter.isRecursive = isRecursive;
     }
 
     private static void createFolderRecursively(File folder) throws RuntimeException {
@@ -135,15 +139,15 @@ public class Converter {
         }
     }
 
-    private static void traverseFolder(File folder, Format inputFormat, Format outputFormat) {
+    private static void convertFolder(File folder, Format inputFormat, Format outputFormat, boolean isRecursive) {
         File[] files = folder.listFiles();
         if (files == null) {
             return;
         }
 
         for (File file : files) {
-            if (file.isDirectory()) {
-                traverseFolder(file, inputFormat, outputFormat);
+            if (isRecursive && file.isDirectory()) {
+                convertFolder(file, inputFormat, outputFormat, true);
             } else if (file.getName().endsWith(formatStrings.get(inputFormat))) {
                 convert(file.getPath(), file.getPath() + formatStrings.get(outputFormat));
             }

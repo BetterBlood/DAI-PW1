@@ -3,7 +3,6 @@ package ch.heigvd;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 
 import java.util.concurrent.Callable;
 
@@ -55,5 +54,27 @@ public class Main implements Callable<Integer> {
         System.out.println("source File : '" + inFile + "'");
         System.out.println("destination File : '" + outFile + "'");
         return 0;
+    }
+
+    private static void test() {
+        // Recursive folder creation from output
+        // Conversion webp->png
+        Converter.changeParameters(true, false);
+        Converter.convert("./image/webp.webp", "./image/a/b/webp.png");
+        // Conversion png->webp
+        Converter.changeParameters(true, false);
+        Converter.convert("./image/png.png", "./image/png.webp");
+        // Conversion jpg->webp
+        Converter.changeParameters(false, false);
+        Converter.convert("./image/jpg.jpg", "./image/jpg.webp");
+        // Conversion webp->jpg
+        Converter.changeParameters(false, false);
+        Converter.convert("./image/webp.webp", "./image/webp.jpg");
+        // Folder conversion
+        Converter.changeParameters(true, false);
+        Converter.convert("./image", "png", "webp");
+        // Recursive folder conversion
+        Converter.changeParameters(true, true);
+        Converter.convert("./image", "png", "webp");
     }
 }
