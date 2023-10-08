@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Static class used to convert webp-png-jpg files
+ */
 public class Converter {
     private enum Format {
         WEBP,
@@ -25,7 +28,6 @@ public class Converter {
     private static final String JPEG_FORMAT = ".jpeg";
     private static final String JPG_FORMAT = ".jpg";
     private static final Map<Format, String> formatStrings = new HashMap<Format, String>();
-
     private static boolean isLossless;
     private static boolean isRecursive;
 
@@ -36,22 +38,49 @@ public class Converter {
         formatStrings.put(Format.JPG, JPG_FORMAT);
     }
 
+    /**
+     * Converts a given string into a Format
+     * @param s the string to convert
+     * @return the Format type expressed by the string
+     * @throws IllegalArgumentException if the string does not match any Format type
+     */
     private static Format stringToFormat(String s) throws IllegalArgumentException {
         return Format.valueOf(s.toUpperCase());
     }
 
+    /**
+     * Tests wether the path to a file points to a webp file
+     * @param file the path to the file
+     * @return true if webp
+     */
     private static boolean isWebp(String file) {
         return file.toLowerCase().endsWith(WEBP_FORMAT);
     }
 
+    /**
+     * Tests wether the path to a file points to a png file
+     * @param file the path to the file
+     * @return true if png
+     */
     private static boolean isPng(String file) {
         return file.toLowerCase().endsWith(PNG_FORMAT);
     }
 
+    /**
+     * Tests wether the path to a file points to a jpg, or jpeg, file
+     * @param file the path to the file
+     * @return true if jpg or jpeg
+     */
     private static boolean isJpg(String file) {
         return file.toLowerCase().endsWith(JPEG_FORMAT) || file.toLowerCase().endsWith(JPG_FORMAT);
     }
 
+    /**
+     * Converts a file to another file format
+     * If the path to the output file does not exist because of missing folders, those are created on the fly.
+     * @param input the path to the input file
+     * @param output the path to the output file
+     */
     public static int convert(String input, String output) {
         // Read
         BufferedImage image;
@@ -82,7 +111,7 @@ public class Converter {
         // Write
         File outputFile = new File(output);
         try {
-            createFolderRecursively(outputFile);
+            createFolder(outputFile);
         }
         catch (RuntimeException e) {
             System.out.println("Error while creating folder structure : " + e);
@@ -112,11 +141,18 @@ public class Converter {
         return 0;
     }
 
+    /**
+     * Convers the content of a folder from a file format to another
+     * Only "webp", "png", "jpeg" or "jpg" are accepted for input and output. not case-sensitive
+     * @param path the path to the folder
+     * @param input the input format
+     * @param output the output format
+     */
     public static int convert(String path, String input, String output) {
         File folder = new File(path);
         if (folder.exists() && folder.isDirectory()) {
             try {
-                Converter.convertFolder(folder, stringToFormat(input), stringToFormat(output), isRecursive);
+                Converter.convertFolder(folder, stringToFormat(input), stringToFormat(output));
             } catch (IllegalArgumentException e) {
                 System.err.println("A specified format is not a valid format : " + e);
                 return 1;
@@ -128,22 +164,38 @@ public class Converter {
         return 0;
     }
 
+    /**
+     * Changes the static parameters of the converter. This is to avoid too many overloaded functions when converting
+     * @param isLossless wether the conversion will be lossless, or lossy
+     * @param isRecursive wether the conversion, if targeting a folder, will be recursive, or not
+     */
     public static void changeParameters(boolean isLossless, boolean isRecursive) {
         Converter.isLossless = isLossless;
         Converter.isRecursive = isRecursive;
     }
 
-    private static void createFolderRecursively(File folder) throws RuntimeException {
+    /**
+     * Creates missing folders recursively from a given folder path
+     * @param folder The folder that is desired to be created
+     * @throws RuntimeException if creating a folder fails
+     */
+    private static void createFolder(File folder) throws RuntimeException {
         File parent = folder.getParentFile();
         if (!parent.exists()) {
-            createFolderRecursively(parent);
+            createFolder(parent);
             if (!parent.mkdir()) {
                 throw new RuntimeException("Error while creating a folder");
             }
         }
     }
 
-    private static void convertFolder(File folder, Format inputFormat, Format outputFormat, boolean isRecursive) {
+    /**
+     * Converts the content of a folder from inputFormat to outputFormat
+     * @param folder the folder to be converted
+     * @param inputFormat the Format type to search for as an input
+     * @param outputFormat the Format type to convert to
+     */
+    private static void convertFolder(File folder, Format inputFormat, Format outputFormat) {
         File[] files = folder.listFiles();
         if (files == null) {
             return;
@@ -151,7 +203,7 @@ public class Converter {
 
         for (File file : files) {
             if (isRecursive && file.isDirectory()) {
-                convertFolder(file, inputFormat, outputFormat, true);
+                convertFolder(file, inputFormat, outputFormat);
             } else if (file.getName().endsWith(formatStrings.get(inputFormat))) {
                 convert(file.getPath(), file.getPath() + formatStrings.get(outputFormat));
             }
