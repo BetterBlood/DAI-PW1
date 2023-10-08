@@ -108,6 +108,9 @@ java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rvld "images" -i "png" -o "webp"
 
 ```bash
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i images\stanley.jpg -o images\test.webp
+```
+
+```
 Conversion Running...
 Converted : images\stanley.jpg to : images\test.webp
 Success ! Elapsed time: 4196ms / 4196541100ns
@@ -115,6 +118,9 @@ Success ! Elapsed time: 4196ms / 4196541100ns
 
 ```bash
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rd images -i webp -o jpeg                    
+```
+
+```
 Conversion Running...
 Converted : images\test.webp to : images\test.webp.jpeg
 Converted : images\test2.webp to : images\test2.webp.jpeg
