@@ -1,56 +1,68 @@
-# ~ Labo 1 DAI ~
+# ~ DAI : Practical Work 1~
 
 ## Description 
 
 This CLI tool is used to convert webp files to png/jpg and vice versa.
 See [parameters](#parameters) and [examples](#examples) for more information.
 
+## Installation
+
+Requires maven to be installed.
+
+Clone the repository and use ```mvn package``` to build the application.
+
 ## Usage
 
-Use ```mvn package``` to build the application.
-
-After build, use the command bellow (with required [parameters](#parameters)) to run the application.
+After build, use the following command to run the application. More examples listed below.
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar
-``` 
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "input.webp" -o "output.jpg"
+```
 
-Be carefully when using this tool, the output is cleared if already exist.
+### Parameters
 
+- -i, --[in](#convert), --[input](#convert) 
+  - Path pointing to the input file for a conversion, ie : 'image/test.jpg'
+  - If used with -d parameter, format type desired as an input, ie : 'jpg'
+- -o, --[out](#convert), --[output](#convert) 
+  - Path pointing to the output of a conversion. The file format type explicits the conversion output format type. If no such file exists it will be created, else it will overwrite the existing file, ie : 'image/test.png'
+  - If used with -d parameter, format type desired as an output, ie : 'png'
+- -d, --[directory](#directory) 
+  - Path pointing to a directory whose content matching -i parameter will be converted to -o parameter format type, ie : 'images'
+  - The extension of the conversion will be appended onto the name of the input file. ex. a file 'a.png' will be converted to 'a.png.webp' for a conversion png to webp.
+  - Can be used with -r parameter to loop recursively in subdirectories.
+- -h, --[help](#help) Display help.
+- -l, --[lossless](#lossless) Enable lossless conversion. Only useful if the output is in webp format.
+- -r, --[recursive](#recursive) Enable recursion in subdirectories. Only useful with -d parameter.
+- -v, --[verbose](#verbose) Enable verbose mode.
 
-## Parameters
-- -d, --[directory](#directory) if we want to convert multiple files in the directory, ie 'images'
-- -e, --echo echo test
-- -h, --[help](#help)               display Help default : false
-- -i, --[inFile](#convert), --[inputFile](#convert) path to the file to get as input, ie : 'image/test.jpg' __OR if -d given : type of input files, ie : 'jpg'__
-- -l, --[lossless](#lossless)           quality of the conversion, lossly by default
-- -o, --[outFile](#convert), --[outputFile](#convert) path to the new file, ie : 'image/test.png' __OR if -d given : type of output files, ie : 'png'__
-- -r, --[recursive](#recursive)          recursivity of the folder creation if needed
-- -v, --[verbose](#verbose)            Verbose mode, default : false
+## Known Issues
 
-### Examples
+- This tool will overwrite any existing file matching the output name.
 
-#### Help
+## Examples
+Any path variables can be written with or without quotation mark. The latter only if there is no space in it.
+
+Relative paths can be written with or without the leading "./"
+
+### Help
 To call the application and show the help :
 ```bash
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -h
 ```
 
-#### Convert
-To call the application and convert a file from 'images/image.png' to 'images/image.jpg' :
+### Convert
+To call the application and convert a file from 'images/stanleypng.png' to 'output/output.webp' :
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/image.png" -o "images/image.jpg"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/stanleypng.png" -o "output/output.webm"
 ```
-The "" are not needed if the path has no space, like in the example above.
 
-TODO : Directory avant Recursive ! + lien depuis commandes !
-
-#### Directory
+### Directory
 To call the application and convert all files from the directory 'images' of the type 'jpg' and convert them into 'png' :
 ```bash
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -d "images" -i "jpg" -o "png"
 ```
 
-#### Recursive
+### Recursive
 To call the application and convert files in 'images' recursively in subFolder of 'images' :
 ```bash
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -d "images" -i "jpg" -o "png" -r
@@ -59,39 +71,58 @@ java -jar target/dai-pw1-1.0-SNAPSHOT.jar -d "images" -i "jpg" -o "png" -r
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rd "images" -i "jpg" -o "png"
 ```
 
-#### Lossless
-To call the application and convert a file from 'images/image.png' to 'images/image.jpg', with a lossless compression :
+### Lossless
+To call the application and convert a file from 'images/stanleypng.png' to 'output/output.webp', with a lossless compression :
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/image.png" -o "images/image.jpg" -l
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/stanleypng.png" -o "output/output.webp" -l
 ```
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/image.png" -lo "images/image.jpg"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/stanleypng.png" -lo "output/output.webp"
 ```
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -li "images/image.png" -o "images/image.jpg"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -li "images/stanleypng.png" -o "output/output.webp"
 ```
 
-#### Verbose
-To call the application and convert a file from 'images/image.png' to 'images/image.jpg', with a lossless compression in a verbose mode.
+### Verbose
+To call the application and convert a file from 'images/pets/cat.png' to 'output/output.webp', with a lossless compression in a verbose mode.
 
 You can, for example, use one of the following non-exhaustive commands bellow :
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/image.png" -o "images/image.jpg" -lv
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/pets/cat.png" -o "output/output.webp" -lv
 ```
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -lv -i "images/image.png" -o "images/image.jpg"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -lv -i "images/pets/cat.png" -o "output/output.webp"
 ```
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -lvi "images/image.png" -o "images/image.jpg"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -lvi "images/pets/cat.png" -o "output/output.webp"
 ```
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -v -l -i "images/image.png" -o "images/image.jpg"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -v -l -i "images/pets/cat.png" -o "output/output.webp"
 ```
-With the directory 'images' from 'jpg' to 'png' :
+With the directory 'images' from 'png' to 'webp' :
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rvld "images" -i "jpg" -o "png"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rvld "images" -i "png" -o "webp"
 ```
 
-### Execution
+### Execution examples
 
-// TODO add execution examples
+```bash
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i images\stanley.jpg -o images\test.webp
+```
+
+```
+Conversion Running...
+Converted : images\stanley.jpg to : images\test.webp
+Success ! Elapsed time: 4196ms / 4196541100ns
+```
+
+```bash
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rd images -i webp -o jpeg                    
+```
+
+```
+Conversion Running...
+Converted : images\test.webp to : images\test.webp.jpeg
+Converted : images\test2.webp to : images\test2.webp.jpeg
+Success ! Elapsed time: 1442ms / 1442195800ns
+```
