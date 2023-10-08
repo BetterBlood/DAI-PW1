@@ -1,4 +1,4 @@
-# ~ Labo 1 DAI ~
+# ~ DAI : Practical Work 1~
 
 ## Description 
 
@@ -27,14 +27,9 @@ java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "input.webp" -o "output.jpg"
   - Path pointing to the output of a conversion. The file format type explicits the conversion output format type. If no such file exists it will be created, else it will overwrite the existing file, ie : 'image/test.png'
   - If used with -d parameter, format type desired as an output, ie : 'png'
 - -d, --[directory](#directory) 
-  - Path pointing to a directory whose content matching -i parameter will be converted to -o parameter format type. ie 'images'
+  - Path pointing to a directory whose content matching -i parameter will be converted to -o parameter format type, ie : 'images'
+  - The extension of the conversion will be appended onto the name of the input file. ex. a file 'a.png' will be converted to 'a.png.webp' for a conversion png to webp.
   - Can be used with -r parameter to loop recursively in subdirectories.
-
-//tests if paths works relatively or absolutely
-
-//what does -e do ?!????
-
-- -e, --echo echo test 
 - -h, --[help](#help) Display help.
 - -l, --[lossless](#lossless) Enable lossless conversion.
 - -r, --[recursive](#recursive) Enable recursion in subdirectories. Only work with -d parameter.
@@ -45,6 +40,9 @@ java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "input.webp" -o "output.jpg"
 - This tool will overwrite any existing file matching the name.
 
 ## Examples
+Any path variables can be written with or without quotation mark. The latter only if there is no space in it.
+
+Relative paths can be written with or without the leading "./"
 
 ### Help
 To call the application and show the help :
@@ -57,9 +55,6 @@ To call the application and convert a file from 'images/image.png' to 'images/im
 ```bash
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/image.png" -o "images/image.jpg"
 ```
-The quotation marks are not needed if the path has no space like in the example above.
-
-TODO : Directory avant Recursive ! + lien depuis commandes !
 
 ### Directory
 To call the application and convert all files from the directory 'images' of the type 'jpg' and convert them into 'png' :
@@ -109,6 +104,19 @@ With the directory 'images' from 'jpg' to 'png' :
 java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rvld "images" -i "jpg" -o "png"
 ```
 
-### Execution
+### Execution examples
 
-// TODO add execution examples
+```bash
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i images\stanley.jpg -o images\test.webp
+Conversion Running...
+Converted : images\stanley.jpg to : images\test.webp
+Success ! Elapsed time: 4196ms / 4196541100ns
+```
+
+```bash
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -rd images -i webp -o jpeg                    
+Conversion Running...
+Converted : images\test.webp to : images\test.webp.jpeg
+Converted : images\test2.webp to : images\test2.webp.jpeg
+Success ! Elapsed time: 1442ms / 1442195800ns
+```

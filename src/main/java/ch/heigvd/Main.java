@@ -22,37 +22,34 @@ public class Main implements Callable<Integer> {
     public static final String GREEN = "\033[1;32m";
 
     @Option(names={"-d", "--directory"},
-            description = "if we want to convert multiple files in the directory, ie 'images'",
+            description = "Path pointing to a directory whose content matching -i parameter will be converted to -o parameter format type, ie : 'images'\nThe extension of the conversion will be appended onto the name of the input file. ex. a file 'a.png' will be converted to 'a.png.webp' for a conversion png to webp.",
             defaultValue = Option.NULL_VALUE)
     private String directory;
 
     @Option(names={"-i", "--in", "--input"},
-            description = "path to the file to get as input, ie : 'image/test.jpg'\nOR if -d given : type of input files, ie : 'jpg'",
+            description = "Path pointing to the input file for a conversion, ie : 'image/test.jpg'\nIf used with -d parameter, format type desired as an input, ie : 'jpg'",
             required = true,
             defaultValue = Option.NULL_VALUE)
     private String input;
 
     @Option(names={"-o", "--out", "--output"},
-            description = "path to the new file, ie : 'image/test.png'\nOR if -d given : type of output files, ie : 'png'",
+            description = "Path pointing to the output of a conversion. The file format type explicits the conversion output format type. If no such file exists it will be created, else it will overwrite the existing file, ie : 'image/test.png'\nIf used with -d parameter, format type desired as an output, ie : 'png'",
             required = true,
             defaultValue = Option.NULL_VALUE)
     private String output;
 
-    @Option(names={"-l", "--lossless"}, description = "quality of the conversion, lossy by default")
+    @Option(names={"-l", "--lossless"}, description = "Enable lossless conversion.")
     private boolean lossless = false;
 
 
-    @Option(names={"-r", "--recursive"}, description = "recursivity of the folder creation if needed")
+    @Option(names={"-r", "--recursive"}, description = "Enable recursion in subdirectories. Only work with -d parameter.")
     private boolean recursive = false;
 
-    @Option(names={"-h", "--help"}, description = "display Help default : ${DEFAULT-VALUE}", usageHelp = true)
+    @Option(names={"-h", "--help"}, description = "Display Help", usageHelp = true)
     private boolean help = false;
 
-    @Option(names={"-v", "--verbose"}, description = "Verbose mode, default : ${DEFAULT-VALUE}")
+    @Option(names={"-v", "--verbose"}, description = "Enable verbose mode")
     private boolean verbose = false;
-
-    @Option(names={"-e", "--echo"}, description = "echo 'input'", required = false, defaultValue = Option.NULL_VALUE)
-    private String echoValue;
 
     @Spec
     CommandSpec spec; // display help if no parameters are given or if the required one are omitted
@@ -73,15 +70,11 @@ public class Main implements Callable<Integer> {
             spec.commandLine().usage(System.err);
             return 1;
         }
-        if (echoValue != null) System.out.println("echo : '" + echoValue + "'");
 
         if (verbose)
         {
             System.out.println("verbose : '" + verbose + "'");
             System.out.println("explain a bit more what is going on during the conversion.");
-
-            System.out.println(echoValue != null ? "echoValue set": "echoValue not set");
-
             System.out.println("lossless : '" + lossless + "'");
             System.out.println("recursive : '" + recursive + "'");
             System.out.println(directory != null ? "Directory selected : " + directory : "no directory");
@@ -91,27 +84,5 @@ public class Main implements Callable<Integer> {
 
         Converter.changeParameters(lossless, recursive);
         return directory == null ? Converter.convert(input, output) : Converter.convert(directory, input, output);
-    }
-
-    private static void test() {
-        // Recursive folder creation from output
-        // Conversion webp->png
-        Converter.changeParameters(true, false);
-        Converter.convert("./image/webp.webp", "./image/a/b/webp.png");
-        // Conversion png->webp
-        Converter.changeParameters(true, false);
-        Converter.convert("./image/png.png", "./image/png.webp");
-        // Conversion jpg->webp
-        Converter.changeParameters(false, false);
-        Converter.convert("./image/jpg.jpg", "./image/jpg.webp");
-        // Conversion webp->jpg
-        Converter.changeParameters(false, false);
-        Converter.convert("./image/webp.webp", "./image/webp.jpg");
-        // Folder conversion
-        Converter.changeParameters(true, false);
-        Converter.convert("./image", "png", "webp");
-        // Recursive folder conversion
-        Converter.changeParameters(true, true);
-        Converter.convert("./image", "png", "webp");
     }
 }
