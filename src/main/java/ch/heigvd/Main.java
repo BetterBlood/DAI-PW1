@@ -38,11 +38,11 @@ public class Main implements Callable<Integer> {
             defaultValue = Option.NULL_VALUE)
     private String output;
 
-    @Option(names={"-l", "--lossless"}, description = "Enable lossless conversion.")
+    @Option(names={"-l", "--lossless"}, description = "Enable lossless conversion. Only useful if the output is in webp format.")
     private boolean lossless = false;
 
 
-    @Option(names={"-r", "--recursive"}, description = "Enable recursion in subdirectories. Only work with -d parameter.")
+    @Option(names={"-r", "--recursive"}, description = "Enable recursion in subdirectories. Only useful with -d parameter.")
     private boolean recursive = false;
 
     @Option(names={"-h", "--help"}, description = "Display Help", usageHelp = true)
