@@ -26,17 +26,17 @@ public class Main implements Callable<Integer> {
             defaultValue = Option.NULL_VALUE)
     private String directory;
 
-    @Option(names={"-i", "--inFile", "--inputFile"},
+    @Option(names={"-i", "--in", "--input"},
             description = "path to the file to get as input, ie : 'image/test.jpg'\nOR if -d given : type of input files, ie : 'jpg'",
             required = true,
             defaultValue = Option.NULL_VALUE)
-    private String inFile;
+    private String input;
 
-    @Option(names={"-o", "--outFile", "--outputFile"},
+    @Option(names={"-o", "--out", "--output"},
             description = "path to the new file, ie : 'image/test.png'\nOR if -d given : type of output files, ie : 'png'",
             required = true,
             defaultValue = Option.NULL_VALUE)
-    private String outFile;
+    private String output;
 
     @Option(names={"-l", "--lossless"}, description = "quality of the conversion, lossy by default")
     private boolean lossless = false;
@@ -68,7 +68,7 @@ public class Main implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        if (inFile == null || outFile == null)
+        if (input == null || output == null)
         {
             spec.commandLine().usage(System.err);
             return 1;
@@ -85,12 +85,12 @@ public class Main implements Callable<Integer> {
             System.out.println("lossless : '" + lossless + "'");
             System.out.println("recursive : '" + recursive + "'");
             System.out.println(directory != null ? "Directory selected : " + directory : "no directory");
-            System.out.println("source File : '" + inFile + "'");
-            System.out.println("destination File : '" + outFile + "'");
+            System.out.println("source File : '" + input + "'");
+            System.out.println("destination File : '" + output + "'");
         }
 
         Converter.changeParameters(lossless, recursive);
-        return directory == null ? Converter.convert(inFile, outFile) : Converter.convert(directory, inFile, outFile);
+        return directory == null ? Converter.convert(input, output) : Converter.convert(directory, input, output);
     }
 
     private static void test() {
