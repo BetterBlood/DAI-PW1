@@ -81,13 +81,13 @@ public class Converter {
      * @param input the path to the input file
      * @param output the path to the output file
      */
-    public static void convert(String input, String output) {
+    public static int convert(String input, String output) {
         // Read
         BufferedImage image;
         File inputFile = new File(input);
         if (!inputFile.exists()) {
             System.out.println("Error, the input file does not exist");
-            return;
+            return 1;
         }
 
         try {
@@ -101,11 +101,11 @@ public class Converter {
                 image = ImageIO.read(new File(input));
             } else {
                 System.out.println("Input file type not supported");
-                return;
+                return 1;
             }
         } catch (IOException e) {
             System.err.println("Error while reading the file : " + e);
-            return;
+            return 1;
         }
 
         // Write
@@ -115,7 +115,7 @@ public class Converter {
         }
         catch (RuntimeException e) {
             System.out.println("Error while creating folder structure : " + e);
-            return;
+            return 1;
         }
         try {
             if (isWebp(output)) {
@@ -131,13 +131,14 @@ public class Converter {
                 ImageIO.write(image, "jpg", outputFile);
             } else {
                 System.out.println("Output file type not supported");
-                return;
+                return 1;
             }
         } catch (IOException e) {
             System.err.println("Error while writing a file : " + e);
         }
 
         System.out.println("Converted : " + input + " to : " + output);
+        return 0;
     }
 
     /**
@@ -147,17 +148,20 @@ public class Converter {
      * @param input the input format
      * @param output the output format
      */
-    public static void convert(String path, String input, String output) {
+    public static int convert(String path, String input, String output) {
         File folder = new File(path);
         if (folder.exists() && folder.isDirectory()) {
             try {
                 Converter.convertFolder(folder, stringToFormat(input), stringToFormat(output));
             } catch (IllegalArgumentException e) {
                 System.err.println("A specified format is not a valid format : " + e);
+                return 1;
             }
         } else {
             System.out.println("The specified path is not a valid directory.");
+            return 1;
         }
+        return 0;
     }
 
     /**
