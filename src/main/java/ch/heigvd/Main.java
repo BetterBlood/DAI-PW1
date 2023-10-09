@@ -10,7 +10,7 @@ import picocli.CommandLine.Spec;
 import java.util.concurrent.Callable;
 
 @Command(
-        name = "image file converter : ",
+        name = "Command Converter Picture",
         description = "convert jpg-png-webp image format, with/without lossless quality compression, is able to run recursively in subFolder",
         version = "1.0.2"
 )
@@ -52,7 +52,7 @@ public class Main implements Callable<Integer> {
     private boolean verbose = false;
 
     @Spec
-    CommandSpec spec; // display help if no parameters are given or if the required one are omitted
+    CommandSpec spec; // used to display help if no parameters are given or if the required ones are omitted
     
     public static void main(String[] args)
     {
@@ -60,7 +60,8 @@ public class Main implements Callable<Integer> {
         long start = System.nanoTime();
         int success = new CommandLine(new Main()).execute(args);
         long end = System.nanoTime();
-        System.out.println((success == 0 ? GREEN + "Success ! " : RED + "Error ! ") + "Elapsed time: " + (end - start) / 1000000 + "ms / " + (end - start) + "ns" + RESET);
+        System.out.println((success == 0 ? GREEN + "Success ! " : RED + "Error ! ") +
+                "Elapsed time: " + (end - start) / 1000000 + "ms / " + (end - start) + "ns" + RESET);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class Main implements Callable<Integer> {
         if (input == null || output == null)
         {
             spec.commandLine().usage(System.err);
-            return 1;
+            return 0; // showing help is considering as a success
         }
 
         if (verbose)

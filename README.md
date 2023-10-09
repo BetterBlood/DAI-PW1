@@ -9,6 +9,10 @@ See [parameters](#parameters) and [examples](#examples) for more information.
 
 Requires maven to be installed.
 
+This project uses [picoCLI](https://picocli.info/) as per required in the instructions to interact with the CLI.
+
+This project also uses [webp-imageio](https://github.com/sejda-pdf/webp-imageio) for manipulating webp format.
+
 Clone the repository and use ```mvn package``` to build the application.
 
 ## Usage
@@ -53,7 +57,7 @@ java -jar target/dai-pw1-1.0-SNAPSHOT.jar -h
 ### Convert
 To call the application and convert a file from 'images/stanleypng.png' to 'output/output.webp' :
 ```bash
-java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/stanleypng.png" -o "output/output.webm"
+java -jar target/dai-pw1-1.0-SNAPSHOT.jar -i "images/stanleypng.png" -o "output/output.webp"
 ```
 
 ### Directory
